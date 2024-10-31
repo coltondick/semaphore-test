@@ -1,9 +1,17 @@
 ---
 - hosts: all
-
   become: true
+
   tasks:
-    - name: update apt packages
+    - name: Update apt packages (Ubuntu)
       apt:
         upgrade: yes
         update_cache: yes
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Update yum packages (Amazon Linux)
+      yum:
+        name: "*"
+        state: latest
+        update_cache: yes
+      when: ansible_facts['os_family'] == "RedHat"
